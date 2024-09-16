@@ -21,6 +21,8 @@ int main () {
 			return 1;
 	}
 
+	// fork to child run writing stdout from command if fork is succesful
+
 	pid_t c1 = fork();
 	if (c1 < 0){
 		perror("fork failed");
@@ -37,6 +39,7 @@ int main () {
 		perror("execvp failed");
 		
 	}
+	// fork another child run reading stdout from command to write into p[0] to pipe contents from first command into second command
 	pid_t c2 = fork();
 	if (c2 < 0){
 		perror("fork failed");
