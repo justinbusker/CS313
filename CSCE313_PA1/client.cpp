@@ -12,6 +12,7 @@
 */
 #include "common.h"
 #include "FIFORequestChannel.h"
+#include <sys/wait.h>
 
 using namespace std;
 
@@ -47,10 +48,21 @@ int main (int argc, char *argv[]) {
 	pid_t pid;
 
 	pid = fork();
-
-	if(pid == 0){
+	
+	if(pid < 0){
+		std::cerr << "Fork failed" << std::endl;
+		return 1;
+	} else if(pid == 0){
 		char *args[] = {const_cast<char*>("./server"), nullptr};
 		execvp(args[0], args);
+
+		std::cerr << "Server exec failed" << std::endl;
+		return 1;
+	} else {
+		std::cout << "Parent process" << getpid() << "waiting for child" << std::endl;
+		
+		wait(NULL);
+		std::cout << "process complete" << std::endl;
 	}
 	
     FIFORequestChannel chan("control", FIFORequestChannel::CLIENT_SIDE);
