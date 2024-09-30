@@ -6,9 +6,9 @@
     Date: 9/15/2024
 	
 	Please include your Name, UIN, and the date below
-	Name:
-	UIN:
-	Date:
+	Name: Justin Busker
+	UIN: 632003978
+	Date: 09/29/24
 */
 #include "common.h"
 #include "FIFORequestChannel.h"
@@ -44,6 +44,15 @@ int main (int argc, char *argv[]) {
 	//Task 1:
 	//Run the server process as a child of the client process
 
+	pid_t pid;
+
+	pid = fork();
+
+	if(pid == 0){
+		char *args[] = {const_cast<char*>("./server"), nullptr};
+		execvp(args[0], args);
+	}
+	
     FIFORequestChannel chan("control", FIFORequestChannel::CLIENT_SIDE);
 
 	//Task 4:
